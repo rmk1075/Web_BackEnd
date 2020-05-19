@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spring.study.guestbook.dto.Guestbook;
 import com.spring.study.guestbook.service.GuestbookService;
 
+@RestController
+@RequestMapping(path="/guestbooks")
 public class GuestbookApiController {
 	@Autowired
 	GuestbookService guestbookService;
