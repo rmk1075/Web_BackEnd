@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.spring.study.guestbook.dto.Guestbook;
 import com.spring.study.guestbook.service.GuestbookService;
@@ -62,5 +65,24 @@ public class GuestbookController {
 		System.out.println("clientIp : " + clientIp);
 		guestbookService.addGuestbook(guestbook, clientIp);
 		return "redirect:list";
+	}
+	
+	@GetMapping(path = "/delete")
+	public String delete(@RequestParam(name = "id", required = true) Long id, @SessionAttribute("isAdmin") String isAdmin,
+			HttpServletRequest request,
+			RedirectAttributes redirectAttr) {
+		if(isAdmin == null || !"true".equals(isAdmin)) {
+			redirectAttr.addFlashAttribute("errorMessage", "로그인을 하지 않았습니다.");
+			return "redirect:loginform";
+		}
+		String clientIp = request.getRemoteAddr();
+		guestbookService.deleteGuestbook(id, clientIp);
+		return "redirect:list";
+	}
+	
+	@GetMapping(path = "/logout")
+	public String logout(HttpSession session) {
+		session.removeAttribute("isAdmin");
+		return "redirect:/list";
 	}
 }

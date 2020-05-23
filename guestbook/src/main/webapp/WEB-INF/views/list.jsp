@@ -21,12 +21,16 @@ ${guestbook.id }<br>
 ${guestbook.name }<br>
 ${guestbook.content }<br>
 ${guestbook.regdate }<br>
-
+		<c:if test="${sessionScope.isAdmin == 'true'}">
+			<a href="delete?id=${guestbook.id}">삭제</a>
+			<br>
+			<br>
+		</c:if>
 	</c:forEach>
 	<br>
 
 	<c:forEach items="${pageStartList}" var="pageIndex" varStatus="status">
-		<a href="list?start=${pageIndex}">${status.index +1 }</a>&nbsp; &nbsp;
+		<a href="list?start=${pageIndex}">${status.index +1}</a>&nbsp; &nbsp;
 </c:forEach>
 
 	<br>
@@ -35,6 +39,9 @@ ${guestbook.regdate }<br>
 		name : <input type="text" name="name"><br>
 		<textarea name="content" cols="60" rows="6"></textarea>
 		<br> <input type="submit" value="등록">
+		<c:if test="${sessionScope.isAdmin == 'true'}">
+			<a href="logout"><button type="button">로그아웃</button></a>
+		</c:if>
 	</form>
 </body>
 </html>
