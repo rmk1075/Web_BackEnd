@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.spring.study.guestbook.argumentresolver.HeaderInfo;
 import com.spring.study.guestbook.dto.Guestbook;
 import com.spring.study.guestbook.service.GuestbookService;
 
@@ -28,7 +30,10 @@ public class GuestbookController {
 	GuestbookService guestbookService;
 	
 	@GetMapping(path = "/list")
-	public String list(@RequestParam(name = "start", required = false, defaultValue = "0") int start, ModelMap model, @CookieValue(value="count", defaultValue="0", required=true) String value, HttpServletResponse response) {
+	public String list(@RequestParam(name = "start", required = false, defaultValue = "0") int start, ModelMap model, @CookieValue(value="count", defaultValue="0", required=true) String value, HttpServletResponse response, HeaderInfo headerInfo) {
+		
+		System.out.println("===argument resolver - headerInfo===");
+		System.out.println(headerInfo.get("user-agent"));
 		
 		try {
 			int i = Integer.parseInt(value);
